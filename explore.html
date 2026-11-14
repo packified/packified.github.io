@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Explore Packs — Packify</title>
+  <meta name="description" content="Browse all premium Minecraft 1.8.9 PvP resource packs.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="shape-grid-bg" id="shape-grid-bg"></div>
+  <main>
+    <div class="container page-head">
+      <h1>Explore Packs</h1>
+      <p>All resource packs in the collection. Search, sort, and find your perfect PvP pack.</p>
+    </div>
+
+    <section class="section" style="padding-top: 24px;">
+      <div class="container">
+        <div class="explore-toolbar">
+          <div class="field">
+            <label for="search">Search packs</label>
+            <input type="search" id="search" placeholder="e.g. Neitous, BedWars, 32x..." autocomplete="off">
+          </div>
+          <div class="field" style="max-width: 220px;">
+            <label for="sort">Sort by</label>
+            <select id="sort">
+              <option value="newest">Newest</option>
+              <option value="price-asc">Price: Low to High</option>
+              <option value="price-desc">Price: High to Low</option>
+              <option value="popular">Popularity</option>
+            </select>
+          </div>
+        </div>
+        <div class="pack-grid" id="pack-grid"></div>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/data.js"></script>
+  <script src="js/currency.js"></script>
+  <script src="js/orders.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/shape-grid.js"></script>
+  <script>
+    mountPage('explore');
+    initShapeGrid(document.getElementById('shape-grid-bg'), {
+      shape: "square",
+      direction: "diagonal",
+      lineColor: "#2a2734",
+      hoverColor: "#ffffff",
+      hoverFillColor: "#ffffff",
+      fillOpacity: 0.15,
+      cellSize: 40,
+      speed: 0.5,
+      tiltX: 0,
+      tiltY: 0,
+      rainbow: false
+    });
+    const grid = document.getElementById('pack-grid');
+    const searchEl = document.getElementById('search');
+    const sortEl = document.getElementById('sort');
+
+    function currentPacks() {
+      const q = searchEl.value.trim().toLowerCase();
+      let packs = PACKS.filter(p =>
+        !q || p.name.toLowerCase().includes(q) ||
+        p.description.toLowerCase().includes(q) ||
+        p.resolution.toLowerCase().includes(q)
+      );
+      switch (sortEl.value) {
+        case 'price-asc': packs.sort((a, b) => a.price - b.price); break;
+        case 'price-desc': packs.sort((a, b) => b.price - a.price); break;
+        case 'popular': packs.sort((a, b) => b.popularity - a.popularity); break;
+        default: packs.sort((a, b) => b.newest - a.newest);
+      }
+      return packs;
+    }
+
+    function refresh() {
+      renderPackGrid(grid, currentPacks());
+      bindFavoriteButtons(grid);
+    }
+
+    searchEl.addEventListener('input', refresh);
+    sortEl.addEventListener('change', refresh);
+    document.addEventListener('packify:currency', refresh);
+    refresh();
+  </script>
+</body>
+</html>

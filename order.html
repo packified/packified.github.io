@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Lookup — Packify</title>
+  <meta name="description" content="Look up your Packify order status.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="shape-grid-bg" id="shape-grid-bg"></div>
+  <main>
+    <div class="container page-head">
+      <h1>Order Lookup</h1>
+      <p>Enter your order ID (e.g. PK-ABC123) to check your order status.</p>
+    </div>
+
+    <section class="section" style="padding-top: 24px;">
+      <div class="container">
+        <form class="lookup-form" id="lookup-form">
+          <div class="field">
+            <label for="order-id">Order ID</label>
+            <input type="text" id="order-id" placeholder="PK-XXXXXX" autocomplete="off" required>
+          </div>
+          <button type="submit" class="btn btn--primary btn--block" style="margin-top:14px;">Look Up Order</button>
+        </form>
+
+        <div class="order-result" id="order-result"></div>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/data.js"></script>
+  <script src="js/currency.js"></script>
+  <script src="js/orders.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/shape-grid.js"></script>
+  <script>
+    mountPage('order');
+    initShapeGrid(document.getElementById('shape-grid-bg'), {
+      shape: "square",
+      direction: "diagonal",
+      lineColor: "#2a2734",
+      hoverColor: "#ffffff",
+      hoverFillColor: "#ffffff",
+      fillOpacity: 0.15,
+      cellSize: 40,
+      speed: 0.5,
+      tiltX: 0,
+      tiltY: 0,
+      rainbow: false
+    });
+
+
+    const form = document.getElementById('lookup-form');
+    const result = document.getElementById('order-result');
+
+    function statusBadge(status) {
+      const cls = status.toLowerCase();
+      return `<span class="status-badge status-badge--${cls}">${status}</span>`;
+    }
+
+    function renderOrder(order) {
+      const date = new Date(order.createdAt);
+      result.innerHTML = `
+        <div class="order-card fade-up">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+            <h2 style="font-size:1.3rem;">${order.packName}</h2>
+            ${statusBadge(order.status)}
+          </div>
+          <dl>
+            <dt>Order ID</dt><dd>${order.id}</dd>
+            <dt>Price</dt><dd>${formatOrderPrice(order)}</dd>
+            <dt>Date</dt><dd>${date.toLocaleString()}</dd>
+            <dt>Name</dt><dd>${order.customer.name || '—'}</dd>
+            <dt>Email</dt><dd>${order.customer.email || '—'}</dd>
+          </dl>
+          ${order.status === 'Pending' ? `
+            <div class="notice">
+              <strong>Action needed:</strong> Join our Discord, create a purchase ticket,
+              and paste your receipt to complete your order.
+            </div>
+            <div style="display:flex; gap:12px; flex-wrap:wrap;">
+              <a class="btn btn--ghost" href="receipt.html?id=${order.id}">View Receipt</a>
+              <a class="btn btn--primary" href="${DISCORD_URL}" target="_blank" rel="noopener">Join Discord</a>
+            </div>` : `
+            <p class="muted">${order.status === 'Verified' ? 'Your order has been verified. The download link will be provided in your Discord ticket.' : 'Your order is complete. Enjoy your pack!'}</p>`}
+        </div>`;
+    }
+
+    function lookup(id) {
+      const order = getOrder(id);
+      if (!order) {
+        result.innerHTML = '<p class="empty-state">No order found with that ID. Double-check and try again.</p>';
+        return;
+      }
+      renderOrder(order);
+    }
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      lookup(document.getElementById('order-id').value);
+    });
+
+    // support ?id=PK-XXXX deep links
+    const prefill = new URLSearchParams(location.search).get('id');
+    if (prefill) {
+      document.getElementById('order-id').value = prefill;
+      lookup(prefill);
+    }
+  </script>
+</body>
+</html>

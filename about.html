@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About — Packify</title>
+  <meta name="description" content="About Packify — premium Minecraft 1.8.9 PvP resource packs.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="shape-grid-bg" id="shape-grid-bg"></div>
+  <main>
+    <div class="container page-head">
+      <h1>About Packify</h1>
+      <p>Premium resource packs for competitive Minecraft players.</p>
+    </div>
+
+    <section class="section" style="padding-top: 24px;">
+      <div class="container about-content">
+        <p>
+          Packify is a small, independent resource-pack store run by a single seller.
+          Every pack is designed specifically for <strong>Minecraft 1.8.9</strong> —
+          the version competitive PvP is still played on — with clean textures,
+          sharp sword animations, and zero visual clutter.
+        </p>
+        <p>
+          Unlike large marketplaces, Packify is a curated collection. No filler packs,
+          no AI-generated content — just hand-crafted resource packs built by someone
+          who plays the game.
+        </p>
+
+        <h2>How purchasing works</h2>
+        <ol class="about-steps">
+          <li><strong>Browse &amp; choose</strong> — find the pack that fits your playstyle on the Explore page.</li>
+          <li><strong>Create your order</strong> — click "Get This Pack" and you'll receive a unique receipt with your order ID.</li>
+          <li><strong>Join Discord</strong> — open a purchase ticket in our Discord server and paste your receipt.</li>
+          <li><strong>Get your pack</strong> — after manual verification, the seller provides your download link and any updates.</li>
+        </ol>
+
+        <h2>Questions?</h2>
+        <p>
+          The fastest way to reach us is through our Discord server. You can also
+          look up an existing order on the <a href="order.html" style="color:var(--accent);">Order Lookup</a> page.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/data.js"></script>
+  <script src="js/currency.js"></script>
+  <script src="js/orders.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/shape-grid.js"></script>
+  <script>mountPage('about');
+    initShapeGrid(document.getElementById('shape-grid-bg'), {
+      shape: "square",
+      direction: "diagonal",
+      lineColor: "#2a2734",
+      hoverColor: "#ffffff",
+      hoverFillColor: "#ffffff",
+      fillOpacity: 0.15,
+      cellSize: 40,
+      speed: 0.5,
+      tiltX: 0,
+      tiltY: 0,
+      rainbow: false
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Receipt — Packify</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="shape-grid-bg" id="shape-grid-bg"></div>
+  <main>
+    <div class="container page-head">
+      <h1>Order Created</h1>
+    </div>
+
+    <section class="section" style="padding-top: 16px;">
+      <div class="container receipt-wrap">
+        <div class="notice">
+          <strong>Your order has been created.</strong><br>
+          Join our Discord server, create a purchase ticket, and paste this receipt into the ticket.
+          The seller will verify your order and provide the resource-pack download.
+        </div>
+
+        <div class="receipt" id="receipt-text"></div>
+
+        <div class="receipt-actions">
+          <button class="btn btn--primary" id="copy-btn">Copy Receipt</button>
+          <a class="btn btn--ghost" id="discord-btn" href="#" target="_blank" rel="noopener">Join Discord</a>
+          <a class="btn btn--ghost" id="view-order-btn" href="#">View Order</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/currency.js"></script>
+  <script src="js/orders.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/shape-grid.js"></script>
+  <script>
+    mountPage('');
+    initShapeGrid(document.getElementById('shape-grid-bg'), {
+      shape: "square",
+      direction: "diagonal",
+      lineColor: "#2a2734",
+      hoverColor: "#ffffff",
+      hoverFillColor: "#ffffff",
+      fillOpacity: 0.15,
+      cellSize: 40,
+      speed: 0.5,
+      tiltX: 0,
+      tiltY: 0,
+      rainbow: false
+    });
+
+
+    const params = new URLSearchParams(location.search);
+    let order = getOrder(params.get('id'));
+
+    // fallback: order was passed in the URL hash (localStorage may not be shared)
+    if (!order && location.hash.startsWith('#o=')) {
+      try {
+        const data = JSON.parse(decodeURIComponent(escape(atob(location.hash.slice(3)))));
+        if (data && data.id) {
+          order = data;
+          // persist it so Order Lookup works when storage is available
+          const orders = getOrders();
+          if (!orders.some(o => o.id === data.id)) {
+            orders.push(data);
+            saveOrders(orders);
+          }
+        }
+      } catch (e) { /* malformed payload — ignore */ }
+    }
+
+    const receiptEl = document.getElementById('receipt-text');
+
+    // Discord link must always work, even if the order can't be found
+    document.getElementById('discord-btn').href = DISCORD_URL;
+
+    if (!order) {
+      receiptEl.textContent = 'Order not found. Check your order ID and try again.';
+    } else {
+      receiptEl.textContent = order.receipt;
+      document.getElementById('view-order-btn').href = `order.html?id=${order.id}`;
+
+      document.getElementById('copy-btn').addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(order.receipt);
+          showToast('Receipt copied to clipboard');
+        } catch {
+          // fallback for non-secure contexts
+          const ta = document.createElement('textarea');
+          ta.value = order.receipt;
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand('copy');
+          ta.remove();
+          showToast('Receipt copied to clipboard');
+        }
+      });
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('is-visible');
+      setTimeout(() => t.classList.remove('is-visible'), 2200);
+    }
+  </script>
+</body>
+</html>

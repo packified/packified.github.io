@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pack — Packify</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="shape-grid-bg" id="shape-grid-bg"></div>
+  <main>
+    <div class="container" style="padding-top: 40px;">
+      <a href="explore.html" class="muted" style="font-size:0.9rem;">&larr; Back to packs</a>
+
+      <div class="pack-detail" style="margin-top: 24px;" id="pack-detail"></div>
+    </div>
+  </main>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/currency.js"></script>
+  <script src="js/orders.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/shape-grid.js"></script>
+  <script>
+    mountPage('explore');
+    initShapeGrid(document.getElementById('shape-grid-bg'), {
+      shape: "square",
+      direction: "diagonal",
+      lineColor: "#2a2734",
+      hoverColor: "#ffffff",
+      hoverFillColor: "#ffffff",
+      fillOpacity: 0.15,
+      cellSize: 40,
+      speed: 0.5,
+      tiltX: 0,
+      tiltY: 0,
+      rainbow: false
+    });
+
+
+    const params = new URLSearchParams(location.search);
+    const pack = getPack(params.get('id'));
+    const detail = document.getElementById('pack-detail');
+    document.title = (pack ? pack.name : 'Pack') + ' — Packify';
+
+    if (!pack) {
+      detail.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><h2>Pack not found</h2><p class="muted">This pack may have been removed.</p><a class="btn btn--primary" style="margin-top:20px;" href="explore.html">Browse packs</a></div>';
+    } else {
+      detail.innerHTML = `
+        <div>
+          ${packArt(pack, true)}
+          <div class="pack-detail__meta">
+            <span class="chip chip--accent">${pack.resolution}</span>
+            <span class="chip">Minecraft ${pack.version}</span>
+            <span class="chip js-price">${formatPrice(pack)}</span>
+          </div>
+          <h1>${pack.name}</h1>
+          <p class="pack-detail__desc">${pack.longDescription}</p>
+          <h3 style="margin-bottom:10px;">What's included</h3>
+          <ul class="pack-detail__features">
+            ${pack.features.map(f => `<li>${f}</li>`).join('')}
+          </ul>
+        </div>
+        <aside class="buy-box">
+          <div class="buy-box__price js-price">${formatPrice(pack)}</div>
+          <p class="buy-box__note">One-time purchase &middot; Digital delivery via Discord &middot; Free updates</p>
+          <form id="buy-form">
+            <div class="field">
+              <label for="cust-name">Your name (optional)</label>
+              <input type="text" id="cust-name" placeholder="Steve" autocomplete="name">
+            </div>
+            <div class="field">
+              <label for="cust-email">Email (optional)</label>
+              <input type="email" id="cust-email" placeholder="you@example.com" autocomplete="email">
+            </div>
+            <div class="buy-box__total">
+              <span>Total</span><span class="js-price">${formatPrice(pack)}</span>
+            </div>
+            <button type="submit" class="btn btn--primary btn--block btn--lg" style="margin-top:18px;">Get This Pack</button>
+          </form>
+          <p class="buy-box__note" style="margin-top:14px;">You'll receive a receipt, then complete payment &amp; download via our Discord server.</p>
+        </aside>`;
+
+      document.getElementById('buy-form').addEventListener('submit', e => {
+        e.preventDefault();
+        const order = createOrder(pack.id, {
+          name: document.getElementById('cust-name').value,
+          email: document.getElementById('cust-email').value
+        });
+        // include the order in the URL hash so the receipt page can display it
+        // even when localStorage isn't shared between pages (e.g. file:// in Firefox)
+        const payload = btoa(unescape(encodeURIComponent(JSON.stringify(order))));
+        location.href = `receipt.html?id=${order.id}#o=${payload}`;
+      });
+
+      document.addEventListener('packify:currency', () => {
+        document.querySelectorAll('.js-price').forEach(el => {
+          el.textContent = formatPrice(pack);
+        });
+      });
+    }
+  </script>
+</body>
+</html>

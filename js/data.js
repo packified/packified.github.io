@@ -1,0 +1,87 @@
+/* Packify — pack catalog */
+const PACKS = [
+  {
+    id: 'neitous-16x',
+    name: 'Ethereal 16x',
+    resolution: '16x',
+    version: '1.8.9',
+    price: 250,
+    currency: 'INR',
+    description: 'Clean, high-contrast 16x PvP textures tuned for competitive play.',
+    longDescription: 'Ethereal 16x is a premium PvP resource pack built for Minecraft 1.8.9. Every texture is hand-optimized for clarity at competitive frame rates — sharp sword swings, readable armor, and zero visual noise. Perfect for players who want a clean, modern look without sacrificing performance.',
+    features: ['Sharp sword swings', 'Readable armor', 'Zero visual noise'],
+    accent: '#f97316',
+    newest: 6,
+    popularity: 95
+  },
+  {
+    id: 'neitous-32x',
+    name: 'Void 16x',
+    resolution: '16x',
+    version: '1.8.9',
+    price: 250,
+    currency: 'INR',
+    description: 'Ultra-sharp 16x textures with maximum detail for high-end PvP.',
+    longDescription: 'Void 16x pushes detail to the limit with ultra-sharp 16x textures. Built for players on high-end hardware who want every pixel perfect — from crystal PvP to BedWars endgame. Includes custom fonts and GUI elements.',
+    features: ['Sharp sword swings', 'Readable armor', 'Zero visual noise'],
+    accent: '#fb923c',
+    newest: 5,
+    popularity: 88
+  },
+  {
+    id: 'neitous-bedwars',
+    name: 'Blood 16x',
+    resolution: '16x',
+    version: '1.8.9',
+    price: 250,
+    currency: 'INR',
+    description: 'A blood-like specialized texture pack',
+    longDescription: 'Blood 16x is purpose-built for BedWars gameplay on Minecraft 1.8.9. Beds, wool, and generators are instantly recognizable, and combat textures stay clean during fast BedWars fights. A favorite on competitive servers.',
+    features: ['Sharp sword swings', 'Readable armor', 'Zero visual noise'],
+    accent: '#f59e0b',
+    newest: 4,
+    popularity: 91
+  },
+  {
+    id: 'neitous-uhc',
+    name: 'Ocean 16x',
+    resolution: '16x',
+    version: '1.8.9',
+    price: 250,
+    currency: 'INR',
+    description: 'Ocean-focused pack with realistic terrain and clean combat.',
+    longDescription: 'Ocean 16x blends realistic natural textures with clean PvP combat textures — ideal for Ultra Hardcore where every resource matters. Trees, ores, and terrain look great while sword and armor textures stay competitive.',
+    features: ['Sharp sword swings', 'Readable armor', 'Zero visual noise'],
+    accent: '#d97706',
+    newest: 3,
+    popularity: 82
+  },
+  {
+    id: 'neitous-short-swords',
+    name: 'Toxic 16x',
+    resolution: '16x',
+    version: '1.8.9',
+    price: 250,
+    currency: 'INR',
+    description: 'A green-themed pack for maximum aesthetic.',
+    longDescription: 'Toxic 16x is a lightweight pack focused entirely on the green theme. Short, crisp sword animations and minimal textures keep your view clear for combo PvP.',
+    features: ['Sharp sword swings', 'Readable armor', 'Zero visual noise'],
+    accent: '#ea580c',
+    newest: 2,
+    popularity: 76
+  },
+  {
+    id: 'neitous-low-fire',
+    name: 'Sugar Candy 16x',
+    resolution: '16x',
+    version: '1.8.9',
+    price: 250,
+    currency: 'INR',
+    description: 'A candy-themed pack for maximum aesthetic.',
+    longDescription: 'Sugar Candy 16x is a candy-themed pack for maximum aesthetic.',
+    features: ['Sharp sword swings', 'Readable armor', 'Zero visual noise'],
+    accent: '#c2410c',
+    newest: 1,
+    popularity: 79
+  }
+];

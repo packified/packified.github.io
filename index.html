@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/jpg" href="logo/logo.png">
+  <title>Packify — Premium Minecraft PvP Packs</title>
+  <meta name="description" content="Clean, competitive resource packs built for Minecraft 1.8.9.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <main>
+    <!-- Hero -->
+    <section class="hero">
+      <div class="ascii-bg" id="ascii-bg"></div>
+      <div class="container hero__inner">
+        <h1 class="fade-up">Premium Minecraft<br>PvP Packs</h1>
+        <p class="fade-up fade-up-1">Clean, competitive resource packs built for Minecraft 1.8.9.</p>
+        <div class="hero__actions fade-up fade-up-2">
+          <a class="btn btn--primary btn--lg" href="explore.html">Explore Packs</a>
+          <a class="btn btn--ghost btn--lg" href="about.html">How It Works</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured packs -->
+    <section class="section">
+      <div class="container">
+        <div class="section__head">
+          <div>
+            <h2>Featured Packs</h2>
+            <p>Hand-picked favorites from the collection.</p>
+          </div>
+          <a class="section__link" href="explore.html">View all packs &rarr;</a>
+        </div>
+        <div class="pack-grid" id="featured-grid"></div>
+      </div>
+    </section>
+
+    <!-- Benefits -->
+    <section class="section" style="background: var(--bg-soft); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+      <div class="container">
+        <div class="section__head">
+          <div>
+            <h2>Why Packify</h2>
+            <p>Built by a player, for players.</p>
+          </div>
+        </div>
+        <div class="benefits-grid">
+          <div class="benefit fade-up">
+            <div class="benefit__icon">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 12h4M14 12h4"/></svg>
+            </div>
+            <h3>Made for Minecraft 1.8.9</h3>
+            <p>Every pack is designed and tested specifically for the 1.8.9 PvP experience.</p>
+          </div>
+          <div class="benefit fade-up fade-up-1">
+            <div class="benefit__icon">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 16.8l-6.2 4.5 2.4-7.4L2 9.4h7.6z"/></svg>
+            </div>
+            <h3>Clean PvP Textures</h3>
+            <p>Sharp swords, readable armor, zero visual noise — built for competitive play.</p>
+          </div>
+          <div class="benefit fade-up fade-up-2">
+            <div class="benefit__icon">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>
+            </div>
+            <h3>Digital Delivery</h3>
+            <p>Get your pack download directly through Discord after purchase verification.</p>
+          </div>
+          <div class="benefit fade-up fade-up-3">
+            <div class="benefit__icon">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg>
+            </div>
+            <h3>Regular Updates</h3>
+            <p>Free updates for every pack — improvements and new versions included.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="section">
+      <div class="container" style="text-align:center;">
+        <h2>Ready to upgrade your PvP?</h2>
+        <p class="muted" style="margin: 12px auto 28px; max-width: 480px;">Browse the collection and grab the pack that fits your style.</p>
+        <a class="btn btn--primary btn--lg" href="explore.html">Explore Packs</a>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/data.js"></script>
+  <script src="js/currency.js"></script>
+  <script src="js/orders.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/gradient-ascii.js"></script>
+  <script>
+    mountPage('home');
+    initGradientASCII(document.getElementById('ascii-bg'), {
+      colors: ["#f97316", "#ffffff", "#ffeddb", "#ffe4e4"],
+      shape: "horizon",
+      characters: " =+xX0S8#@",
+      cellSize: 18,
+      density: 0.8
+    });
+    const featured = [...PACKS].sort((a, b) => b.popularity - a.popularity).slice(0, 3);
+    function refreshFeatured() {
+      renderPackGrid(document.getElementById('featured-grid'), featured);
+      bindFavoriteButtons();
+    }
+    refreshFeatured();
+    document.addEventListener('packify:currency', refreshFeatured);
+  </script>
+</body>
+</html>
